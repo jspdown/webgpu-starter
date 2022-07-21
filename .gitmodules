@@ -1,0 +1,12 @@
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw.git
+        branch = master
+[submodule "lib/dawn"]
+	path = lib/dawn
+	url = https://dawn.googlesource.com/dawn
+        branch = main
+[submodule "lib/webgpu"]
+	path = lib/webgpu
+	url = https://github.com/webgpu-native/webgpu-headers.git
+        branch = main

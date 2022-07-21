@@ -1,0 +1,4 @@
+interface WebApp {
+    void WebApp(unsigned long width, unsigned long height);
+    void Run();
+};

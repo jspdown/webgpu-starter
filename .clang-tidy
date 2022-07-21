@@ -1,0 +1,9 @@
+---
+Checks: 'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-prefer-member-initializer'
+WarningsAsErrors: true
+HeaderFilterRegex: 'lol'
+AnalyzeTemporaryDtors: false
+FormatStyle: google
+CheckOptions:
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
