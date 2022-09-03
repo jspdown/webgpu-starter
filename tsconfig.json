@@ -5,10 +5,14 @@
     "target": "es6",
     "allowJs": true,
     "moduleResolution": "node",
+    "baseUrl": ".",
     "typeRoots": [
-      "./node_modules/@webgpu/types",
-      "./node_modules/@types"
+      "node_modules/@webgpu/types",
+      "node_modules/@types"
     ],
+    "paths": {
+      "app": ["src/target/web/app.gen.d.ts"]
+    },
     "lib": [
       "dom",
       "es5"

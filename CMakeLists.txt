@@ -5,7 +5,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 set(CMAKE_CXX_STANDARD 17)
 
-
 # TODO: add -flto once dawn fixes its ODR errors.
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0 -DNDEBUG=1 -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -D_DEBUG=1 -Wno-unused -O0")
@@ -25,12 +24,15 @@ set(DAWN_BUILD_NODE_BINDINGS OFF)
 
 # Target specific builds.
 if (EMSCRIPTEN)
-	# Generate glue code from WebIDL definitions.
-	add_custom_target(glue ALL COMMAND ${EMSCRIPTEN_ROOT_PATH}/tools/webidl_binder ${CMAKE_CURRENT_SOURCE_DIR}/src/target/web/app.idl glue)
-	set(glue_cpp ${CMAKE_CURRENT_BINARY_DIR}/glue.cpp)
-	set(glue_js ${CMAKE_CURRENT_BINARY_DIR}/glue.js)
+	set(WEB_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/target/web)
+	# Generate glue code from WebIDL definition.
+	add_custom_target(generate_glue ALL COMMAND ${EMSCRIPTEN_ROOT_PATH}/tools/webidl_binder ${WEB_SOURCE_DIR}/app.idl ${WEB_SOURCE_DIR}/glue.gen)
 
-	add_custom_target(html ALL)
+	# Generate typescript definition from WebIDL definition.
+	add_custom_target(generate_ts_def ALL COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/.bin/webidl2ts -i ${WEB_SOURCE_DIR}/app.idl -n app -ed -o ${WEB_SOURCE_DIR}/app.gen.d.ts)
+
+	add_custom_target(generate)
+	add_dependencies(generate generate_glue generate_ts_def)
 
 	# Compute sources to WebAssembly.
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s EXPORT_NAME=createModule -s EXPORT_ES6=1 -s MODULARIZE=1 -s INVOKE_RUN=0")
@@ -39,12 +41,14 @@ if (EMSCRIPTEN)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s ASSERTIONS=0 -s STRICT=1")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s MINIMAL_RUNTIME=0 -s TEXTDECODER=2 -s NO_FILESYSTEM=1 --output_eol=linux")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s ABORTING_MALLOC=0 -s ALLOW_MEMORY_GROWTH=0 -s SUPPORT_ERRNO=0 -s MALLOC=emmalloc")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --post-js ${glue_js}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --post-js ${WEB_SOURCE_DIR}/glue.gen.js")
 
-	file(GLOB_RECURSE platform_sources src/target/web/*)
+	file(GLOB_RECURSE platform_sources ${WEB_SOURCE_DIR}/*.cpp)
+	file(GLOB_RECURSE platform_headers ${WEB_SOURCE_DIR}/*.h)
+	list(REMOVE_ITEM platform_sources ${WEB_SOURCE_DIR}/glue.gen.cpp)
 
-	add_executable(app ${sources} ${platform_sources} ${glue_cpp_sources} ${headers})
-	add_dependencies(app glue)
+	add_executable(app ${sources} ${platform_sources} ${headers} ${platform_headers})
+	add_dependencies(app generate)
 	target_include_directories(app PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 	# Bundle typescript sources.
@@ -59,11 +63,6 @@ else ()
 
 	file(GLOB_RECURSE platform_sources src/target/native/*.cpp)
 	file(GLOB_RECURSE platform_headers src/target/native/*.h)
-
-	message("sources" ${sources})
-	message("platform_sources" ${platform_sources})
-	message("platform_headers" ${platform_headers})
-	message("headers" ${headers})
 
 	add_executable(app ${sources} ${platform_sources} ${headers} ${platform_headers})
 

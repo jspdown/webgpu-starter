@@ -38,8 +38,3 @@ git submodule update --remote --merge
 # Pull Dawn external packages.
 cd lib/dawn && gclient sync
 ```
-
-## TODO:
-
-- Generate Typescript definitions from the IDL definition.
-- Add support for Windows and Mac.
