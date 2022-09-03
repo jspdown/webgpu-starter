@@ -13,15 +13,14 @@ Native:
 ```sh
 mkdir -p dist/native && cd dist/native
 cmake -DCMAKE_BUILD_TYPE=Release ../..
-make -j 10 app
+make -j 10
 ```
 
 Web:
 ```sh
 mkdir -p dist/web && cd dist/web
-emcmake -DCMAKE_BUILD_TYPE=Release ../..
-# cmake -DCMAKE_TOOLCHAIN_FILE=${EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE=Release ../..
-make -j 10 bundle
+emcmake cmake -DCMAKE_BUILD_TYPE=Release ../..
+make -j 10
 ```
 
 ## Update dependencies
