@@ -1,7 +1,7 @@
 #ifndef NATIVE_CONTEXT_H
 #define NATIVE_CONTEXT_H
 
-#include "../../context.h"
+#include <app/context.h>
 
 #define GLFW_EXPOSE_NATIVE_X11
 #include <GLFW/glfw3.h>

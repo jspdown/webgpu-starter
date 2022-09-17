@@ -1,10 +1,10 @@
 #ifndef WEB_APP_H
 #define WEB_APP_H
 
-#include <memory>
-
-#include "../../app.h"
 #include "context.h"
+
+#include <memory>
+#include <app/app.h>
 
 namespace app {
 

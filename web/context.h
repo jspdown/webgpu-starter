@@ -1,7 +1,7 @@
 #ifndef WEBGPU_CONTEXT_H
 #define WEBGPU_CONTEXT_H
 
-#include "../../context.h"
+#include <app/context.h>
 
 namespace app {
 
@@ -10,7 +10,6 @@ namespace app {
     class WebContext : public Context {
     public:
         WebContext(uint32_t width, uint32_t height);
-        ~WebContext() noexcept override;
 
         void Loop(FrameHandler *handler) override;
 

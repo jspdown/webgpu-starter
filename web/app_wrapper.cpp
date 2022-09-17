@@ -5,5 +5,5 @@
 
 using namespace app;
 
-// Glue code is generated using emscripten's webidl_binder.
-#include "./glue.gen.cpp"
+// Bind code is generated using emscripten's webidl_binder.
+#include <generated/app.bind.cpp>

@@ -38,12 +38,6 @@ namespace app {
         m_swapchain = wgpuDeviceCreateSwapChain(m_device, surface, &swapChainDesc);
     }
 
-    WebContext::~WebContext() noexcept {
-        wgpuSwapChainRelease(m_swapchain);
-        wgpuQueueRelease(m_queue);
-        wgpuDeviceRelease(m_device);
-    }
-
 
     EM_BOOL handleFrame(double, void *data) {
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)

@@ -1,7 +1,9 @@
+
+// @ts-ignore
 import createModule from "app"
 
 async function main() {
-    const res = await fetch('app.wasm')
+    const res = await fetch("app.wasm")
     const wasm = await res.arrayBuffer()
 
     const adapter = await navigator.gpu.requestAdapter()
@@ -17,4 +19,4 @@ async function main() {
     app.Run();
 }
 
-main().catch(err => console.error(err))
+main().catch((err: Error) => console.error(err))

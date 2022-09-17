@@ -1,5 +1,6 @@
 #include "app.h"
 
+#include <webgpu/webgpu.h>
 #include <iostream>
 
 namespace app {
@@ -11,7 +12,7 @@ namespace app {
                         .next = nullptr,
                         .sType = WGPUSType_ShaderModuleWGSLDescriptor,
                 },
-                .source = source.c_str(),
+                .code = source.c_str(),
         };
         WGPUShaderModuleDescriptor desc = {
                 .nextInChain = &wgslDesc.chain,
@@ -91,9 +92,6 @@ namespace app {
         pipelineDesc.multisample = multisampleState;
 
         m_pipeline = wgpuDeviceCreateRenderPipeline(m_context->GetDevice(), &pipelineDesc);
-
-        wgpuShaderModuleRelease(vertexShaderModule);
-        wgpuShaderModuleRelease(fragmentShaderModule);
     }
 
     void App::Run() {
@@ -120,16 +118,11 @@ namespace app {
         wgpuRenderPassEncoderSetPipeline(pass, m_pipeline);
         wgpuRenderPassEncoderDraw(pass, 3, 1, 0, 0);
         wgpuRenderPassEncoderEnd(pass);
-        wgpuRenderPassEncoderRelease(pass);
 
         auto commands = wgpuCommandEncoderFinish(encoder, nullptr);
 
-        wgpuCommandEncoderRelease(encoder);
-
         wgpuQueueSubmit(m_context->GetQueue(), 1, &commands);
-        wgpuCommandBufferRelease(commands);
         wgpuSwapChainPresent(m_context->GetSwapChain());
-        wgpuTextureViewRelease(backBufferView);
     }
 
 }

@@ -1,5 +1,6 @@
 #include "./context.h"
-#include "../../app.h"
+
+#include <app/app.h>
 #include <iostream>
 
 int main() {

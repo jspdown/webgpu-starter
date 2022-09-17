@@ -10,17 +10,12 @@
       "node_modules/@webgpu/types",
       "node_modules/@types"
     ],
-    "paths": {
-      "app": ["src/target/web/app.gen.d.ts"]
-    },
     "lib": [
-      "dom",
+      "DOM",
       "es5"
     ]
   },
   "exclude": [
-    "node_modules",
-    "lib",
-    "dist"
+    "node_modules"
   ]
 }

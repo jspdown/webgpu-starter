@@ -23,6 +23,3 @@ node_modules/
 
 # IDE
 .idea
-
-# Generated files
-*.gen.*
